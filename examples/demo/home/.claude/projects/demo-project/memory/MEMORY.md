@@ -1,0 +1,1 @@
+- [Pacing](pacing.md) — owner wants fast pacing, short pauses

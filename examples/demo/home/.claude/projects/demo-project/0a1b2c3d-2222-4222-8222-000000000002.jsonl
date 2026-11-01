@@ -1,0 +1,3 @@
+{"type": "user", "timestamp": "2026-10-21T17:00:00Z", "message": {"role": "user", "content": "Here is the bot token 123456789:AAHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx and the key sk-demodemodemodemodemodemo, set up the upload bot."}}
+{"type": "assistant", "timestamp": "2026-10-21T17:05:00Z", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Edit", "input": {"file_path": "bot/main.py"}}]}}
+{"type": "user", "timestamp": "2026-10-21T17:30:00Z", "message": {"role": "user", "content": "Works. Keep it on long polling for now."}}

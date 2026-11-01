@@ -1,0 +1,17 @@
+{
+  "name": "showrunner",
+  "description": "Showrunner: run a team of Claude Code agents from an Obsidian vault.",
+  "owner": {
+    "name": "cmwname",
+    "url": "https://github.com/cmwname"
+  },
+  "plugins": [
+    {
+      "name": "showrunner",
+      "source": "./",
+      "description": "Run a team of Claude Code agents from an Obsidian vault: status board, decision log, subagent protocol, live mirror of your setup and session history.",
+      "version": "0.1.0",
+      "category": "productivity"
+    }
+  ]
+}

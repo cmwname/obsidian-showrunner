@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.inFolder("Projects")
+views:
+  - type: table
+    name: All
+    order:
+      - file.name
+      - project
+      - status
+      - updated
+      - next
+    sort:
+      - property: updated
+        direction: DESC
+  - type: table
+    name: Waiting for owner
+    filters:
+      and:
+        - status == "waiting for owner"
+    order:
+      - file.name
+      - project
+      - updated
+      - next

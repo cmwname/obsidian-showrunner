@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+.showrunner-cache.json
+examples/demo-vault/.obsidian/

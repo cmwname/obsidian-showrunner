@@ -1,0 +1,27 @@
+{
+  "description": "Showrunner: mirror the Claude Code setup into the Obsidian vault and load the status board",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run.sh\" --hook --inject",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/run.sh\" --hook",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
