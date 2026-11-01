@@ -1,6 +1,6 @@
 {
   "name": "showrunner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run a team of Claude Code agents from an Obsidian vault: one status board, a decision log with rejected options, a self-building kanban, a vault health check, and a live mirror of your agents, skills, rules, memory and session history.",
   "author": {
     "name": "cmwname",

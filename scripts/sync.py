@@ -18,60 +18,30 @@ import re
 import sys
 
 LABELS = {
-    "en": {
-        "system": "System", "agents": "Agents", "skills": "Skills", "rules": "Rules",
-        "memory": "Memory", "sessions": "Sessions", "status": "Status", "team": "Team",
-        "root": "root", "global": "Global", "rules_prefix": "Rules",
-        "banner": "Auto-copy, edits here get overwritten. Source:",
-        "agents_title": "Agents", "agents_intro": "Who does what and how they hand off work: [[{team}]].",
-        "agents_cols": "| Agent | Scope | Tools |", "scope_project": "project", "scope_global": "global",
-        "tools_all": "all", "model_default": "default", "where": "Lives in", "tools": "Tools",
-        "team_link": "Team map", "prompt": "Agent prompt",
-        "skills_title": "Skills", "skills_cols": "| Skill | Scope | Purpose | Folder |",
-        "memory_title": "What Claude remembers",
-        "s_title": "Claude session history", "s_intro": "Secrets in prompts are masked. Past months are folded into monthly folders.",
-        "s_cols": "| Started (UTC) | Session | Projects | Agents | Prompts |",
-        "s_none": "No sessions yet.", "s_past": "Past months", "s_count": "{n} sessions",
-        "s_month_intro": "{n} sessions, newest first. All sessions: [[{index}]].",
-        "s_time": "Time", "s_projects": "Projects", "s_agents": "Agents", "s_prompts": "Owner prompts",
-        "s_requests": "Owner requests", "inject": "Showrunner status board ({path}). Detail lives in the linked notes:",
-        "projects": "Projects", "summary": "Summary", "board": "Board", "health": "Health",
-        "board_note": "Kanban view of [[{status}]], rebuilt on every sync. Edit the status board, not this file.",
-        "h_title": "Vault health", "h_intro": "Rebuilt on every sync ({date}). Fix the notes, not this report.",
-        "h_clean": "All clean.", "h_total": "{n} to fix",
-        "h_stale": "Stuck: active, not updated for more than {days} days",
-        "h_links": "Broken links", "h_fields": "Missing status / updated / next",
-        "h_summary": "No summary callout", "h_offboard": "Active tasks missing from the status board",
-        "h_inject": "Vault health: {n} to fix → {path}",
-        "active": ["in progress", "waiting for owner"], "closed": ["done", "rejected", "paused", "idea"],
-    },
-    "ru": {
-        "system": "Система", "agents": "Агенты", "skills": "Скиллы", "rules": "Правила",
-        "memory": "Память", "sessions": "Сессии", "status": "Статус", "team": "Команда",
-        "root": "корень", "global": "Глобальные", "rules_prefix": "Правила",
-        "banner": "Автокопия, правки здесь затрутся. Источник:",
-        "agents_title": "Агенты", "agents_intro": "Кто что делает и как взаимодействуют: [[{team}]].",
-        "agents_cols": "| Агент | Где | Инструменты |", "scope_project": "проект", "scope_global": "глобальный",
-        "tools_all": "все", "model_default": "по умолчанию", "where": "Где живёт", "tools": "Инструменты",
-        "team_link": "Схема команды", "prompt": "Промпт агента",
-        "skills_title": "Скиллы", "skills_cols": "| Скилл | Где | Для чего | Папка |",
-        "memory_title": "Что Claude помнит о владельце",
-        "s_title": "История сессий Claude", "s_intro": "Секреты в запросах замаскированы. Прошлые месяцы сложены в папки по месяцам.",
-        "s_cols": "| Начало (UTC) | Сессия | Проекты | Агенты | Запросов |",
-        "s_none": "Сессий пока нет.", "s_past": "Прошлые месяцы", "s_count": "{n} сессий",
-        "s_month_intro": "{n} сессий. Новые сверху. Все сессии — [[{index}]].",
-        "s_time": "Время", "s_projects": "Проекты", "s_agents": "Агенты", "s_prompts": "Сообщений владельца",
-        "s_requests": "Запросы владельца", "inject": "Доска статуса Showrunner ({path}). Детали в заметках по ссылкам:",
-        "projects": "Проекты", "summary": "Кратко", "board": "Доска", "health": "Проверка",
-        "board_note": "Канбан-вид [[{status}]], пересобирается при каждой синхронизации. Править «Статус», а не этот файл.",
-        "h_title": "Проверка хранилища", "h_intro": "Пересобирается при каждой синхронизации ({date}). Править заметки, а не этот отчёт.",
-        "h_clean": "Всё чисто.", "h_total": "замечаний: {n}",
-        "h_stale": "Застряли: активны, не обновлялись больше {days} дн.",
-        "h_links": "Битые ссылки", "h_fields": "Нет status / updated / next",
-        "h_summary": "Нет блока «Кратко»", "h_offboard": "Активные задачи, которых нет в «Статусе»",
-        "h_inject": "Проверка хранилища: замечаний {n} → {path}",
-        "active": ["в работе", "ждёт владельца"], "closed": ["готово", "отклонено", "пауза", "идея"],
-    },
+    "system": "System", "agents": "Agents", "skills": "Skills", "rules": "Rules",
+    "memory": "Memory", "sessions": "Sessions", "status": "Status", "team": "Team",
+    "root": "root", "global": "Global", "rules_prefix": "Rules",
+    "banner": "Auto-copy, edits here get overwritten. Source:",
+    "agents_title": "Agents", "agents_intro": "Who does what and how they hand off work: [[{team}]].",
+    "agents_cols": "| Agent | Scope | Tools |", "scope_project": "project", "scope_global": "global",
+    "tools_all": "all", "model_default": "default", "where": "Lives in", "tools": "Tools",
+    "team_link": "Team map", "prompt": "Agent prompt",
+    "skills_title": "Skills", "skills_cols": "| Skill | Scope | Purpose | Folder |",
+    "memory_title": "What Claude remembers",
+    "s_title": "Claude session history", "s_intro": "Secrets in prompts are masked. Past months are folded into monthly folders.",
+    "s_cols": "| Started (UTC) | Session | Projects | Agents | Prompts |",
+    "s_none": "No sessions yet.", "s_past": "Past months", "s_count": "{n} sessions",
+    "s_month_intro": "{n} sessions, newest first. All sessions: [[{index}]].",
+    "s_time": "Time", "s_projects": "Projects", "s_agents": "Agents", "s_prompts": "Owner prompts",
+    "s_requests": "Owner requests", "inject": "Showrunner status board ({path}). Detail lives in the linked notes:",
+    "projects": "Projects", "summary": "Summary", "board": "Board", "health": "Health",
+    "board_note": "Kanban view of [[{status}]], rebuilt on every sync. Edit the status board, not this file.",
+    "h_title": "Vault health", "h_intro": "Rebuilt on every sync ({date}). Fix the notes, not this report.",
+    "h_clean": "All clean.", "h_total": "{n} to fix",
+    "h_stale": "Stuck: active, not updated for more than {days} days",
+    "h_links": "Broken links", "h_fields": "Missing status / updated / next",
+    "h_summary": "No summary callout", "h_offboard": "Active tasks missing from the status board",
+    "h_inject": "Vault health: {n} to fix → {path}",
 }
 
 SECRETS = [
@@ -99,7 +69,7 @@ class Sync:
     def __init__(self, project, vault, home, transcripts, cfg, today):
         self.project, self.vault, self.home, self.transcripts = project, vault, home, transcripts
         self.cfg, self.today = cfg, today
-        self.L = LABELS.get(cfg.get("lang", "en"), LABELS["en"])
+        self.L = LABELS
         self.root = vault / self.L["system"]
         self.projects = cfg.get("projects", {})
         self.written = set()
@@ -335,7 +305,7 @@ class Sync:
 
     def notes(self):
         """Hand-written notes: everything outside System/ and the templates folder."""
-        skip = {self.L["system"], "Templates", "Шаблоны", ".obsidian", ".claude", ".trash"}
+        skip = {self.L["system"], "Templates", ".obsidian", ".claude", ".trash"}
         for p in self.vault.rglob("*.md"):
             rel = p.relative_to(self.vault)
             if not skip.intersection(rel.parts[:1]):
@@ -344,6 +314,7 @@ class Sync:
     def health(self):
         L, hcfg = self.L, self.cfg.get("health", {})
         days = int(hcfg.get("stale_days", 7))
+        active = set(hcfg.get("active_statuses", ["in progress", "waiting for owner"]))
         names = {p.stem for p in self.vault.rglob("*.md")} | {p.name for p in self.vault.rglob("*") if p.suffix in (".base", ".canvas")}
         names |= {pathlib.Path(r).stem for r in self.written} | {L["health"]}  # this report isn't written yet
         status_links = set()
@@ -367,14 +338,14 @@ class Sync:
                 found["fields"].append(f"{link}: {', '.join(missing)}")
             if not re.search(r"^> \[!(summary|abstract|tldr|info)\]", body, re.M | re.I):
                 found["summary"].append(link)
-            if status in L["active"]:
+            if status in active:
                 try:
                     age = (self.today - datetime.date.fromisoformat(meta.get("updated", "")[:10])).days
                 except ValueError:
                     age = None
                 if age is not None and age > days:
                     found["stale"].append(f"{link}: {age}")
-                if rel.stem not in status_links and meta.get("type") not in ("project", "проект"):
+                if rel.stem not in status_links and rel.stem != rel.parent.name:  # hubs are Projects/<P>/<P>.md
                     found["offboard"].append(f"{link} ({status})")
         total = sum(len(v) for v in found.values())
         out = [self.header(f"./{L['status']}.md + {L['projects']}/", ["health"], {"issues": total}),

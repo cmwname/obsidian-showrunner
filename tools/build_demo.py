@@ -22,8 +22,8 @@ project, home, tr = fixture.build(demo)
 (project / ".claude" / "showrunner.json").write_text(
     (project / ".claude" / "showrunner.json").read_text(encoding="utf-8").replace('"../vault"', '"../../demo-vault"'),
     encoding="utf-8")
-for f in (ROOT / "templates" / "vault" / "en").rglob("*"):
-    target = vault / f.relative_to(ROOT / "templates" / "vault" / "en")
+for f in (ROOT / "templates" / "vault").rglob("*"):
+    target = vault / f.relative_to(ROOT / "templates" / "vault")
     if f.is_file() and not target.exists():
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(f, target)

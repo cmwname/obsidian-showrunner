@@ -7,15 +7,15 @@ description: Keep the project's Obsidian vault (status board, decisions, version
 
 The vault is the team's backlog and memory: status, owner decisions (including rejected options), version history, journal, IDs. Deliverables (texts, scripts, code, renders) stay in the repo; the vault only links to them.
 
-Read `.claude/showrunner.json` for `vault` (path) and `lang` (`en` or `ru`: write notes in that language, use the matching note names below). Full protocol for every agent: the vault note `00 For agents.md` (`00 Агентам.md`).
+Read `.claude/showrunner.json` for `vault` (path). Note content can be in any language; the service names below are fixed. Full protocol for every agent: the vault note `00 For agents.md`.
 
-| en | ru |
+| What | Where |
 |---|---|
-| `Status.md` | `Статус.md` |
-| `Projects/<Project>/<Project>.md` | `Проекты/<Проект>/<Проект>.md` |
-| `Journal/YYYY-MM.md` | `Журнал/YYYY-MM.md` |
-| `Templates/Task.md` | `Шаблоны/Задача.md` |
-| `System/` (generated, never edit) | `Система/` |
+| Status board | `Status.md` |
+| Project hub | `Projects/<Project>/<Project>.md` |
+| Journal | `Journal/YYYY-MM.md` |
+| Task template | `Templates/Task.md` |
+| Generated, never edit | `System/` |
 
 ## Reading — spend as few tokens as possible
 
@@ -28,7 +28,7 @@ Read `.claude/showrunner.json` for `vault` (path) and `lang` (`en` or `ru`: writ
 
 After every finished task or owner checkpoint:
 
-1. **Task note:** update "Now" and "Versions", frontmatter `status`, `updated`, `next`, and rewrite the folded `> [!summary]- Summary` callout (ru: `Кратко`) at the top if the state changed. Every hub and task note has one: 2–3 sentences on what it is, where it stands, what's next.
+1. **Task note:** update "Now" and "Versions", frontmatter `status`, `updated`, `next`, and rewrite the folded `> [!summary]- Summary` callout at the top if the state changed. Every hub and task note has one: 2–3 sentences on what it is, where it stands, what's next.
 2. **Decisions:** one line per owner verdict: `- DD.MM: what was decided — why`. Log rejected options too ("v04 rejected: too close to the reference") so nobody proposes them again.
 3. **Status board:** one line per task, in the right section, linking the task note.
 4. **Journal:** append `- DD.MM · <project> · <agent or —> · what was done → path`.
@@ -39,12 +39,12 @@ New task, video or product: create a note from `Templates/Task.md` in the projec
 
 Both are generated on every sync; never edit them.
 
-- `System/Board.md` (ru `Система/Доска.md`): the status board as a kanban for the owner. To move a card, edit `Status.md`.
-- `System/Health.md` (ru `Система/Проверка.md`): stuck tasks (active, `updated` older than `health.stale_days`, default 7), broken links, missing `status`/`updated`/`next`, missing summary callout, active tasks absent from the status board. The issue count is injected at session start. When the owner asks for a review, or about once a week, read the report and fix the notes it names: refresh or close stuck tasks, fix links, add missing lines to the status board. Then tell the owner in a few lines what changed.
+- `System/Board.md`: the status board as a kanban for the owner. To move a card, edit `Status.md`.
+- `System/Health.md`: stuck tasks (active, `updated` older than `health.stale_days`, default 7), broken links, missing `status`/`updated`/`next`, missing summary callout, active tasks absent from the status board. The issue count is injected at session start. When the owner asks for a review, or about once a week, read the report and fix the notes it names: refresh or close stuck tasks, fix links, add missing lines to the status board. Then tell the owner in a few lines what changed.
 
 Subagents only append one journal line; they never edit the status board or hubs. When you delegate, pass the subagent the path of the task note.
 
-Frontmatter values: `type: project | task`, `status: idea | in progress | waiting for owner | paused | done | rejected` (ru: `идея | в работе | ждёт владельца | пауза | готово | отклонено`), `updated: YYYY-MM-DD`, `next: one line`.
+Frontmatter values: `type: project | task`, `status: idea | in progress | waiting for owner | paused | done | rejected` (or your own vocabulary, listed in `health.active_statuses`), `updated: YYYY-MM-DD`, `next: one line`.
 
 ## Never
 

@@ -81,7 +81,7 @@ def build(root):
         home / ".claude" / "skills" / "thumbnail" / "SKILL.md": SKILL.format(
             name="thumbnail", desc="Bold-type YouTube thumbnails, three options per brief."),
         project / ".claude" / "showrunner.json": json.dumps({
-            "vault": "../vault", "lang": "en",
+            "vault": "../vault",
             "projects": {"channel/": "Channel", "bot/": "Upload bot"},
         }, indent=2) + "\n",
         tr / "memory" / "MEMORY.md": "- [Pacing](pacing.md) — owner wants fast pacing, short pauses\n",

@@ -5,8 +5,6 @@
 <p align="center"><b>Run a team of Claude Code agents from an Obsidian vault.</b><br>
 One status board, a decision log that remembers what you rejected, and a live view of your whole agent setup.</p>
 
-<p align="center"><a href="README.ru.md">Русская версия</a></p>
-
 ---
 
 You have a main Claude session and a few subagents: a researcher, a writer, a designer, an editor. After a week you can't tell what's in progress, what's waiting for you, why version 4 was thrown out, or what the designer's prompt even says. Claude can't either: every new session starts by re-reading a 15 KB status file, or worse, by proposing the option you rejected on Tuesday.
@@ -45,7 +43,7 @@ flowchart LR
 | `skills/setup` | `/showrunner:setup`: finds your vault, writes the config, scaffolds notes, wires `CLAUDE.md` and agents |
 | `hooks/hooks.json` | Runs the sync at session start (and injects the board) and after every answer |
 | `scripts/sync.py` | The mirror. Python standard library only, writes a file only when it changed, ~0.15 s on a warm cache |
-| `templates/` | Vault skeleton (English and Russian), `CLAUDE.md` and agent snippets |
+| `templates/` | Vault skeleton, `CLAUDE.md` and agent snippets |
 
 ## Install
 
@@ -70,27 +68,25 @@ Setup asks which vault to use (it reads Obsidian's vault list), which folders ar
 ```json
 {
   "vault": "~/Obsidian/team",
-  "lang": "en",
   "projects": { "channel": "Channel", "bot/": "Upload bot" },
   "rules": { "max_depth": 3, "exclude": ["vendor"] },
   "mirror": { "agents": true, "skills": true, "rules": true, "memory": true, "sessions": true },
   "inject_status": true,
   "inject_limit": 4000,
   "board": true,
-  "health": { "stale_days": 7 }
+  "health": { "stale_days": 7, "active_statuses": ["in progress", "waiting for owner"] }
 }
 ```
 
 | Key | Meaning |
 |---|---|
 | `vault` | Vault folder, absolute, `~/…` or relative to the project |
-| `lang` | `en` or `ru`: note names and generated labels |
 | `projects` | Folder or path substring → project hub name. Sessions that touched it link to the hub |
 | `rules` | Where to look for `CLAUDE.md` files and which folders to skip |
 | `mirror` | Turn parts of the mirror off |
 | `inject_status`, `inject_limit` | Load the status board at session start, capped at N characters |
 | `board` | Build the kanban view; `false` turns it off |
-| `health` | `stale_days`: when an active task counts as stuck; `false` turns the check off |
+| `health` | `stale_days`: when an active task counts as stuck. `active_statuses`: which `status` values count as active, so you can keep your own vocabulary. `false` turns the check off |
 
 ## Privacy
 

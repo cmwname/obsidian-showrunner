@@ -121,14 +121,20 @@ class SyncTest(unittest.TestCase):
         self.run_sync()
         self.assertFalse(self.system.exists())
 
-    def test_russian_labels(self):
+    def test_custom_active_statuses(self):
         cfg_path = self.project / ".claude" / "showrunner.json"
         cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-        cfg["lang"] = "ru"
+        cfg["health"] = {"stale_days": 7, "active_statuses": ["doing"]}
         cfg_path.write_text(json.dumps(cfg), encoding="utf-8")
-        self.run_sync()
-        self.assertTrue((self.vault / "Система" / "Сессии" / "2026-10" / "Сессии 2026-10.md").exists())
-        self.assertTrue((self.vault / "Система" / "Правила" / "Правила — project (корень).md").exists())
+        note = "---\ntype: {}\nstatus: doing\nupdated: {}\nnext: x\n---\n\n> [!summary]- Summary\n> s\n\n# {}\n"
+        self.write_vault("Status.md", "# Status\n\n## Doing\n\n- nothing here\n")
+        self.write_vault("Projects/Channel/Edit.md", note.format("task", "2026-10-01", "Edit"))
+        self.write_vault("Projects/Channel/Channel.md", note.format("project", "2026-11-04", "Channel"))
+        self.run_sync("2026-11-05")
+        report = (self.system / "Health.md").read_text(encoding="utf-8")
+        self.assertIn("[[Edit]]: 35", report)
+        self.assertIn("[[Edit]] (doing)", report)
+        self.assertNotIn("[[Channel]] (doing)", report)  # a hub is not a task, it needn't be on the board
 
     def write_vault(self, rel, text):
         p = self.vault / rel

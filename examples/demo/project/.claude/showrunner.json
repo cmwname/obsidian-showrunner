@@ -1,6 +1,5 @@
 {
   "vault": "../../demo-vault",
-  "lang": "en",
   "projects": {
     "channel/": "Channel",
     "bot/": "Upload bot"

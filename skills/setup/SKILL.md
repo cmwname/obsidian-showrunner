@@ -10,21 +10,20 @@ Talk to the user in their language. Ask only what you can't detect. Never overwr
 ## 1. Find the vault
 
 - Obsidian keeps its vault list in `obsidian.json`: `%APPDATA%\obsidian\` (Windows), `~/Library/Application Support/obsidian/` (macOS), `~/.config/obsidian/` (Linux). Offer the vaults found there; otherwise ask for a folder (a new empty folder is fine, the user opens it in Obsidian later).
-- Language for notes: `ru` if the user writes in Russian, else `en`. Other languages: use `en` note names, write content in the user's language.
+- Service names (`Status.md`, `Projects/`, `System/`, `Templates/`) stay in English. Note content can be in the user's language; if their `status` values are not English, list the active ones in `health.active_statuses`.
 
 ## 2. Write `.claude/showrunner.json`
 
 ```json
 {
   "vault": "<absolute path, forward slashes>",
-  "lang": "en",
   "projects": { "<folder or unique substring in tool paths>": "<Project hub name>" },
   "rules": { "max_depth": 3, "exclude": [] },
   "mirror": { "agents": true, "skills": true, "rules": true, "memory": true, "sessions": true },
   "inject_status": true,
   "inject_limit": 4000,
   "board": true,
-  "health": { "stale_days": 7 }
+  "health": { "stale_days": 7, "active_statuses": ["in progress", "waiting for owner"] }
 }
 ```
 
@@ -34,14 +33,14 @@ Talk to the user in their language. Ask only what you can't detect. Never overwr
 
 ## 3. Scaffold the vault
 
-Copy `${CLAUDE_PLUGIN_ROOT}/templates/vault/<lang>/` into the vault, skipping files that already exist. Then for each project in `projects`, create its hub from the task template (`type: project`) with sections Now, Decisions, Files. Fill what you already know from the repo (README, CLAUDE.md, recent files); leave the rest short. Don't invent history. Start every hub and task note with the folded summary callout from the template. Suggest the Kanban community plugin if the user wants the board as cards.
+Copy `${CLAUDE_PLUGIN_ROOT}/templates/vault/` into the vault, skipping files that already exist. Then for each project in `projects`, create its hub from the task template (`type: project`) with sections Now, Decisions, Files. Fill what you already know from the repo (README, CLAUDE.md, recent files); leave the rest short. Don't invent history. Start every hub and task note with the folded summary callout from the template. Suggest the Kanban community plugin if the user wants the board as cards.
 
 If the project already has a status/backlog file (`STATUS.md`, `TODO.md`, `backlog.md`), offer to move it: copy it into the vault's archive folder, rebuild the status board from it, and replace the original with a one-line pointer to the vault.
 
 ## 4. Wire Claude
 
-- Append `${CLAUDE_PLUGIN_ROOT}/templates/snippets/<lang>/CLAUDE.md` to the project's `CLAUDE.md`, with the vault path filled in.
-- Show the user `${CLAUDE_PLUGIN_ROOT}/templates/snippets/<lang>/agent.md` and offer to append it to their agents in `.claude/agents/` and `~/.claude/agents/`. Skip agents that already have it.
+- Append `${CLAUDE_PLUGIN_ROOT}/templates/snippets/CLAUDE.md` to the project's `CLAUDE.md`, with the vault path filled in.
+- Show the user `${CLAUDE_PLUGIN_ROOT}/templates/snippets/agent.md` and offer to append it to their agents in `.claude/agents/` and `~/.claude/agents/`. Skip agents that already have it.
 - If agents run with restricted tools or the vault is outside the project, suggest adding the vault to `permissions.additionalDirectories` in `.claude/settings.json`. The user approves settings changes themselves.
 
 ## 5. First sync and check
@@ -50,4 +49,4 @@ Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run.sh" --inject` from the project root
 
 Optional: the Obsidian MCP server (community plugin Local REST API) gives heading-level reads and frontmatter queries. Everything works without it.
 
-Finish with a short summary: vault path, what was created, what the user should open first (`Home.md` / `00 Главная.md`).
+Finish with a short summary: vault path, what was created, what the user should open first (`00 Home.md`).
